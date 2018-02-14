@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+    <head>
+        <title>Mathematical poem to calculate the "day of the week" for any day of any year.</title>
+    </head>
+    <body>
+        <font size="+2">
+        <center>
+            <hr>Mathematical poem to calculate the "day of the week" for any day of any year.<hr><br>
+            The last of Feb., or of Jan. will do<br>
+            (Except that in Leap Years it's Jan. 32)<br>
+            Then for even months use the month's own day, <br>
+            And for odd ones add 4, or take it away*<br>
+            <br>
+            Now to work out your doomsday the orthodox way<br>
+            Three things you should add to the century day<br>
+            <b>Dozens</b>, <b>remainder</b>, and <b>fours</b>
+            in the latter,<br>
+            (If you alter by sevens of course it won't matter)<br>
+            <br>
+            In Julian times, lackaday, lackaday<br>
+            Zero was Sunday, centuries fell back a day<br>
+            But Gregorian 4 hundreds are always Tues.<br>
+            And now centuries extra take us back twos.<br>
+            <br>
+            *According to length or simply remember,<br>
+            you only subtract for September, or November.<br>
+            <br>
+            <br>
+            *************************<br>
+            <b>J. H. Conway, Jan., 1976</b><br>
+            *************************<br>
+            <br>
+        </center>
+        </font>
+            
+        <hr>
+        <h4>An Example of How to do the calculation</h4>
+        The best way to go about using this poem to calculate the day of the week
+        is to work backward in the poem. That is, start with the third part and figure
+        out the century day first. For 1997, we would use the Gregorian calander, so
+        we start by looking at the century day for the year 400 (or 800 or ... 
+        or 1600 or 2000) which always gives Tuesday as the century day. Hence, taking
+        the 16th century (1600) and adding a century ("centuries extra") gives us
+        Sunday ("Tuesday back two") as the century day for 1700. Similarly, we will
+        get Friday for 1800 and Wednesday for 1900 as the century day.<br>
+        <br>
+        Now working with Wednesday as the century day for our 1997 year, we take
+        "Dozens, remainder and fours in the latter" from 97.
+        <ul>
+        <li>Dozens gives us (97 DIV 12 = 8) eight twelves,</li>
+        <li>Remainder gives us (97 MOD 12 = 1) one remainder, and</li>
+        <li>Fours in the latter gives us (1 DIV 4 = 0) zero fours in the latter.</li>
+        </ul>
+        Now adding these ( modulas 7; "If you alter by sevens of course it won't
+        matter") to the century day (Wednesday) we get:<br>
+        <ul>
+        <li>Wednesday + 8 + 1 + 0 = Wednesday + 9 = Wednesday + 2 = Friday</li>
+        </ul>
+        Therefore, Friday is the doomsday for 1997.<br>
+        <br>
+        Finally, the first part will complete the calculation in the following way:
+        <ul>
+        <li> "The last of Feb., or of Jan. will do (Except that in Leap 
+        Years it's Jan. 32)" [Note it's not a leap year]:</li>
+           <ul>
+           <li>January(01) 31th is a Friday.</li>
+           <li>February(02) 28th is a Friday.</li>
+           </ul>
+        <li>"Then for even months use the month's own day:</li>
+           <ul>
+           <li>April(04) 4th is a Friday.</li>
+           <li>June(06) 6th is a Friday.</li>
+           <li>August(08) 8th is a Friday.</li>
+           <li>October(10) 10th is a Friday.</li>
+           <li>December(12) 12th is a Friday.</li>
+           </ul>
+        <li>"And for odd ones add 4, or take it away* (*According to length
+        or simply remember, you only subtract for September, or November.)":</li>
+           <ul>
+           <li>March(03) 7th is a Friday.</li>
+           <li>May(05) 9th is a Friday.</li>
+           <li>July(07) 11th is a Friday.</li>
+           <li>September(09) 5th is a Friday.</li>
+           <li>November(11) 7th is a Friday.</li>
+           </ul>
+        </ul>
+        <br>
+    </body>
+</html>

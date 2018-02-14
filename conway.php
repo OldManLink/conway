@@ -22,7 +22,7 @@ if(isset($_POST["conway"]))
 $pFlags = isset($_GET['flags']) ? $_GET['flags'] : 
 		(isset($_POST['flags']) ? $_POST['flags'] : 42);
 $tPrintDebug = $pFlags == 73;
-$tDate = randomDate('1900-01-01', '2099-12-31');
+$tDate = randomDate('1800-01-01', '2199-12-31');
 
 if ($tPrintDebug)
 {
@@ -56,6 +56,29 @@ function getDayIndex($dateString)
 function getDay($dayIndex)
 {
     return date('l', strtotime("Sunday +{$dayIndex} days"));
+}
+
+function printDayOptions($theDate)
+{
+    global $t;
+    $tKeyDays = getCenturyDays($theDate);
+    foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex) 
+    {
+        $tDay = getDay($dayIndex);
+        print "$t[5]<option $tKeyDays[$dayIndex]value='$dayIndex'>$tDay</option>\n";
+    }
+}
+
+function getCenturyDays($theDate)
+{
+    $tCentury = intval(date('Y', strtotime($theDate)) / 100);
+    $tKeyDay = (2 + 5 * ($tCentury % 4)) % 7;
+    $tCDays = array();
+    foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex) 
+    {
+        $tCDays[$dayIndex] = $dayIndex == $tKeyDay ? "selected " : "";
+    }
+    return $tCDays;
 }
 
 function printDebug($message)

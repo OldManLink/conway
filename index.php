@@ -13,7 +13,7 @@
             <form action="/" method="POST">
                 <?
                 $tI = 0;
-                if(($tPostArgsCount == 2 || $tPostArgsCount == 3))
+                if($tPostArgsCount == 3)
                 {
                     print "$t[$tI]<div align=center><font size='+3'>$tYesNo!<br>$pConway<br>$tIsWas a<br>$tDay.</font></div>\n";
                     $tI = 4;
@@ -21,10 +21,7 @@
                 print "$t[$tI]<div align=center><font size='+2'><br>Please calculate<br>(or guess)<br>the weekday:</font></div>\n";
                 print "$t[4]<div align=center><font size='+3'><br>$tDate</font></div>\n";
                 print "$t[4]<div align=center><br><select name='guess'>\n";
-                print "$t[5]<option value='1'>Monday</option><option value='2'>Tuesday</option>\n";
-                print "$t[5]<option selected value='3'>Wednesday</option><option value='4'>Thursday</option>\n";
-                print "$t[5]<option value='5'>Friday</option><option value='6'>Saturday</option>\n";
-                print "$t[5]<option value='0'>Sunday</option>\n";
+                printDayOptions($tDate);
                 print "$t[4]</select><br></div>\n";
                 print "$t[4]<input type='hidden' name='flags' value=$pFlags>\n";
                 print "$t[4]<input type='hidden' name='conway' value=$tDate>\n";

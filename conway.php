@@ -4,20 +4,28 @@ ini_set('display_errors', 1);
 
 // Set up tab stops: $t[0] = no tabs, $t[9] = 9 tabs. 1 tab = 4 spaces.
 unset($t);$t[0]="";for($i=1;$i<10;$i++)$t[$i]=$t[$i-1]."    ";
-$sp = "<font size=+5>&nbsp;</font>";
 
 $tGetArgsCount = count($_GET);
 $tPostArgsCount = count($_POST);
 $tToday = time();
+$tNow = milliseconds();
 
 if(isset($_POST["conway"]))
 {
     $pConway = $_POST["conway"];
     $pGuess = $_POST["guess"];
+    $pThen = $_POST["then"];
+    $pTimes = json_decode($_POST["times"], TRUE);
     $tAnswer = getDayIndex($pConway);
-    $tYesNo = ($tAnswer == $pGuess) ? 'Correct' : 'Wrong';
+    $tCorrect = $tAnswer == $pGuess;
+    $tYesNo = $tCorrect ? 'Correct' : 'Wrong';
     $tIsWas = (strtotime($pConway) <= $tToday) ? 'was' : 'will be';
     $tDay = getDay($tAnswer);
+    $tTimes = logTime($pTimes, $pThen, $tNow, $tCorrect);
+}
+else
+{
+    $tTimes = "[]";
 }
 $pFlags = isset($_GET['flags']) ? $_GET['flags'] : 
 		(isset($_POST['flags']) ? $_POST['flags'] : 42);
@@ -58,6 +66,7 @@ function getDay($dayIndex)
     return date('l', strtotime("Sunday +{$dayIndex} days"));
 }
 
+// Print the days of the week as options for a select or drop-down list
 function printDayOptions($theDate)
 {
     global $t;
@@ -69,6 +78,7 @@ function printDayOptions($theDate)
     }
 }
 
+// Used together with `printDayOptions` to select the key day for the century
 function getCenturyDays($theDate)
 {
     $tCentury = intval(date('Y', strtotime($theDate)) / 100);
@@ -81,6 +91,27 @@ function getCenturyDays($theDate)
     return $tCDays;
 }
 
+// returns the current unix timestamp in milliseconds
+function milliseconds()
+{
+    $mt = explode(' ', microtime());
+    return ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
+}
+
+// Add the latest time taken to the times history and return the array as a JSON string
+function logTime($pTimes, $pThen, $tNow, $tCorrect)
+{
+    $tResult = array();
+    $tNext = $tCorrect ? $tNow - $pThen : -1;
+    foreach ($pTimes as $pTime)
+    {
+        array_push($tResult, $pTime);
+    }
+    array_push($tResult, $tNext);
+    return json_encode($tResult);
+}
+
+// Prints stuff only if the global debug flag is true
 function printDebug($message)
 {
 	global $tPrintDebug, $t;

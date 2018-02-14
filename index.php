@@ -17,18 +17,20 @@
             <form action="/" method="POST">
                 <?
                 $tI = 0;
-                if($tPostArgsCount == 3)
+                if($tPostArgsCount == 5)
                 {
-                    print "$t[$tI]<div align=center><font size='+3'>$tYesNo!<br>$pConway<br>$tIsWas a<br>$tDay.</font></div>\n";
+                    print "$t[$tI]<div id='answer' align=center>$tYesNo!<br>$pConway<br>$tIsWas a<br>$tDay.</div>\n";
                     $tI = 4;
                 }
-                print "$t[$tI]<div align=center><font size='+2'><br>Please calculate<br>(or guess)<br>the weekday:</font></div>\n";
-                print "$t[4]<div align=center><font size='+3'><br>$tDate</font></div>\n";
-                print "$t[4]<div align=center><br><select name='guess'>\n";
+                print "$t[$tI]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
+                print "$t[4]<div id='theDate' align=center>$tDate</div>\n";
+                print "$t[4]<div align=center><select name='guess'>\n";
                 printDayOptions($tDate);
-                print "$t[4]</select><br></div>\n";
+                print "$t[4]</select></div>\n";
                 print "$t[4]<input type='hidden' name='flags' value=$pFlags>\n";
                 print "$t[4]<input type='hidden' name='conway' value=$tDate>\n";
+                print "$t[4]<input type='hidden' name='then' value=$tNow>\n";
+                print "$t[4]<input type='hidden' name='times' value=$tTimes>\n";
                 print "$t[4]<button id='conway_submit'>Guess</button>\n";
                 ?>
             </form>

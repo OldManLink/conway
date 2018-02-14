@@ -6,6 +6,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="HandheldFriendly" content="true">
         <link rel="stylesheet" type="text/css" href="conway.css">
+        <link rel="apple-touch-icon" sizes="57x57" href="icons/conway_57.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="icons/conway_72.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="icons/conway_114.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="icons/conway_144.png" />
     </head>
     <? include_once "conway.php"; ?>
     <body>

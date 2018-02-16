@@ -39,112 +39,167 @@ legend,button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
 
 /* Custom styling */
 * {
-	-ms-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body 
 {
-	background: #404040;
-	color: #333;
-	font: bold 0.857em/1.5em "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
+    background: #404040;
+    color: #333;
+    font: bold 0.857em/1.5em "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
 }
 
 input[type=text],
 input[type=password] 
 {
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	display: block;
-	margin: 0 auto 10px auto;
-	outline-width: 0;
-	padding: 3px 4px;
-	width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    display: block;
+    margin: 0 auto 10px auto;
+    outline-width: 0;
+    padding: 3px 4px;
+    width: 100%;
 }
 
 input[type=hidden] 
 {
-	display: none;
+    display: none;
 }
 
 label 
 {
-	display: block;
-	margin: 0 auto;
-	width: 100%;
+    display: block;
+    margin: 0 auto;
+    width: 100%;
 }
 
 #container 
 {
-	background: #f0f0f0;
-	border: 1px solid #111;
-	border-radius: 7px;
-	margin: 30px auto;
-	width: 310px;
+    background: #f0f0f0;
+    border: 1px solid #111;
+    border-radius: 7px;
+    margin: 30px auto;
+    width: 310px;
 }
 
-#container form 
+#statistics
 {
-	padding: 25px 30px;
+    padding-top: 10px;
+    font-size: 75%;
+    line-height: normal;
+    text-align: -webkit-center;
+    min-height: 28px;
+    overflow: auto; /* Automatic scrollbars like a frame */
+}
+
+#container form
+{
+    padding: 25px 30px 0px;
+    margin-bottom: 0em;
+}
+
+#panel
+{
+    padding: 0px 30px;
+    width: 100%;
+    height: 0px;
+    -webkit-transition: height 750ms;
+    transition: height 750ms;
+    overflow: hidden;
+}
+
+#panel.showing
+{
+    height: 139px;
+}
+
+#drawerHandle
+{
+    background: #f0f0f0;
+    color: #b0b0b0;
+    border: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#drawerHandle:hover
+{
+    color: #808080;
+}
+
+#drawerHandle:focus
+{
+    outline:0;
 }
 
 #answer
 {
-	font-size: 130%;
+    font-size: 130%;
     margin: 10px;
 }
 
 #prompt
 {
-	font-size: 110%;
+    font-size: 110%;
     margin: 15px;
 }
 
 #theDate
 {
-	font-size: 150%;
+    font-size: 150%;
     margin: 10px;
 }
 
 button[id^="conway_"]
 {
-	border: 2px solid #c0c0c0;
-	border-radius: 6px;
-	color: #700000;
-	display: block;
-	margin: 15px auto 0 auto;
-	padding: 6px;
-	width: 100%;
-	
-	background-color: #ffdd00;
-		
-	/* W3C */
-	background: linear-gradient(top, #ffcc88, #ff7700);
-	
-	/* Safari 4-5, Chrome 1-9 */
-	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffcc88), to(#ff7700));
-	
-	/* Safari 5.1, Chrome 10+ */
-	background: -webkit-linear-gradient(top, #ffcc88, #ff7700);
-	
-	/* Firefox 3.6+ */
-	background: -moz-linear-gradient(top, #ffcc88, #ff7700);
-	
-	/* IE < 9 */
-	filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcc88', endColorstr='#ff7700')";
-	
-	/* IE 10 */
-	background: -ms-linear-gradient(top, #ffcc88, #ff7700);
-	
-	/* Opera 11.10+ */
-	background: -o-linear-gradient(top, #ffcc88, #ff7700);
+    border: 2px solid #c0c0c0;
+    border-radius: 6px;
+    color: #700000;
+    display: block;
+    margin: 15px auto 0 auto;
+    padding: 6px;
+    width: 100%;
+    
+    background-color: #ffdd00;
+        
+    /* W3C */
+    background: linear-gradient(top, #ffcc88, #ff7700);
+    
+    /* Safari 4-5, Chrome 1-9 */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffcc88), to(#ff7700));
+    
+    /* Safari 5.1, Chrome 10+ */
+    background: -webkit-linear-gradient(top, #ffcc88, #ff7700);
+    
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(top, #ffcc88, #ff7700);
+    
+    /* IE < 9 */
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcc88', endColorstr='#ff7700')";
+    
+    /* IE 10 */
+    background: -ms-linear-gradient(top, #ffcc88, #ff7700);
+    
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, #ffcc88, #ff7700);
 }
 
 button[id^="conway_"]:hover 
 {
-	border-color: #808080;
+    border-color: #808080;
+}
+
+button[id^="conway_"]:focus
+{
+    outline:0;
 }
 
 /* Tablet Landscape */

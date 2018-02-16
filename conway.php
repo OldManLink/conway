@@ -16,9 +16,10 @@ if(isset($_POST["conway"]))
     $pGuess = $_POST["guess"];
     $pThen = $_POST["then"];
     $pTimes = json_decode($_POST["times"], TRUE);
+    $pShowStats = $_POST["stats"];
     $tAnswer = getDayIndex($pConway);
     $tCorrect = $tAnswer == $pGuess;
-    $tYesNo = $tCorrect ? 'Correct' : 'Wrong';
+    $tYesNo = $pThen < 0 ? '(Skipped)' : ($tCorrect ? 'Correct!' : 'Wrong!');
     $tIsWas = (strtotime($pConway) <= $tToday) ? 'was' : 'will be';
     $tDay = getDay($tAnswer);
     $tTimes = logTime($pTimes, $pThen, $tNow, $tCorrect);
@@ -26,21 +27,22 @@ if(isset($_POST["conway"]))
 else
 {
     $tTimes = "[]";
+    $pShowStats = "false";
 }
 $pFlags = isset($_GET['flags']) ? $_GET['flags'] : 
-		(isset($_POST['flags']) ? $_POST['flags'] : 42);
+    (isset($_POST['flags']) ? $_POST['flags'] : 42);
 $tPrintDebug = $pFlags == 73;
 $tDate = randomDate('1800-01-01', '2199-12-31');
 
 if ($tPrintDebug)
 {
     print "<!-- debugging output...\n";
-    printDebug("POST: conway - '$pConway'; guess - '$pGuess'; flags - '$pFlags'");
+    printDebug("POST: then - '$pThen'; conway - '$pConway'; guess - '$pGuess'; flags - '$pFlags'; stats - '$pShowStats'");
     printDebug("TEMPS: tAnswer - '$tAnswer'; tDay - '$tDay'");
     print "$t[1] ...end debugging output -->\n";
 }
-	
-// Find a randomDate between $start_date and $end_date
+
+// Find a random Date between $start_date and $end_date
 function randomDate($start_date, $end_date)
 {
     // Convert to timetamps
@@ -99,10 +101,10 @@ function milliseconds()
 }
 
 // Add the latest time taken to the times history and return the array as a JSON string
-function logTime($pTimes, $pThen, $tNow, $tCorrect)
+function logTime($pTimes, $pThen, $pNow, $pCorrect)
 {
     $tResult = array();
-    $tNext = $tCorrect ? $tNow - $pThen : -1;
+    $tNext = $pThen < 0 ? 0 : ($pCorrect ? $pNow - $pThen : -1);
     foreach ($pTimes as $pTime)
     {
         array_push($tResult, $pTime);
@@ -114,7 +116,7 @@ function logTime($pTimes, $pThen, $tNow, $tCorrect)
 // Prints stuff only if the global debug flag is true
 function printDebug($message)
 {
-	global $tPrintDebug, $t;
-	if ($tPrintDebug) print "$t[1]$message\n";
+    global $tPrintDebug, $t;
+    if ($tPrintDebug) print "$t[1]$message\n";
 }
 ?>

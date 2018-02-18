@@ -34,6 +34,7 @@
                 print "$t[4]<input type='hidden' name='times' value=$tTimes>\n";
                 print "$t[4]<input type='hidden' name='stats' value=$pShowStats>\n";
                 print "$t[4]<button id='conway_submit'>Guess</button>\n";
+                print "$t[4]<button type='button' disabled id='drawerHandle'>&nbsp;</button>\n";
                 ?>
             </form>
         </div>

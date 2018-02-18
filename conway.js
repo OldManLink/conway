@@ -5,6 +5,7 @@
  
  function addStatsPanel()
 {
+    removeDummyDrawerButton();
     var tContainer = document.getElementById('container');
     tContainer.appendChild(getPanel());
     tContainer.appendChild(getDrawerButton());
@@ -51,7 +52,7 @@ function getStatsText()
     {
         return 'Success rate: ' + tSuccessRate + '%<br>'
             + 'Average time: ' + tAverageTime + ' secs<br>'
-            + 'Skipped: ' + tSkips;
+            + 'Guesses: ' + tGuesses.length + ', Skipped: ' + tSkips;
     }
 }
 
@@ -68,6 +69,12 @@ function skipGuess()
 {
     document.getElementsByName('then')[0].value = -1;
     document.getElementById('theForm').submit();
+}
+
+function removeDummyDrawerButton()
+{
+    var tButton = document.getElementById('drawerHandle');
+    tButton.parentNode.removeChild(tButton);
 }
 
 function getDrawerButton()

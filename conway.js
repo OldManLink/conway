@@ -13,18 +13,27 @@
 
 function getPanel()
 {
-    var tShowing = JSON.parse(getStatsInput().value);
+    var tShowing = getConwayData('stats');
     var tPanel = document.createElement('div');
     tPanel.id = 'panel';
     if(tShowing) tPanel.classList.add('showing');
     tPanel.appendChild(getStats());
+    tPanel.appendChild(getHints());
     tPanel.appendChild(getSkipButton());
     return tPanel;
 }
 
-function getStatsInput()
+function getConwayData(attribute)
 {
-    return document.getElementsByName('stats')[0];
+    var data = JSON.parse(document.getElementsByName('data')[0].value);
+    return data[attribute];
+}
+
+function setConwayData(attribute, value)
+{
+    var data = JSON.parse(document.getElementsByName('data')[0].value);
+    data[attribute] = value;
+    document.getElementsByName('data')[0].value = JSON.stringify(data);
 }
 
 function getStats()
@@ -33,6 +42,29 @@ function getStats()
     tStats.id = 'statistics';
     tStats.innerHTML = getStatsText();
     return tStats;
+}
+
+function getHints()
+{
+    var tHints = document.createElement('div');
+    tHints.id = 'hints';
+    tHints.align = 'center';
+    var cb = document.createElement('input');
+    cb.id = 'useHints';
+    cb.type = 'checkbox';
+    cb.checked = getConwayData('hints');
+    cb.addEventListener('click', updateHints);
+    tHints.appendChild(cb);
+    var label = document.createElement('span');
+    label.innerHTML = ' use Century hints';
+    tHints.appendChild(label);
+    return tHints;
+}
+
+function updateHints()
+{
+    var tChecked = document.getElementById('useHints').checked;
+    setConwayData('hints', tChecked);
 }
 
 function getStatsText()
@@ -67,7 +99,7 @@ function getSkipButton()
 
 function skipGuess()
 {
-    document.getElementsByName('then')[0].value = -1;
+    setConwayData('then', -1);
     document.getElementById('theForm').submit();
 }
 
@@ -88,8 +120,6 @@ function getDrawerButton()
 
 function togglePanelShowing()
 {
-    var tPanel = document.getElementById('panel');
-    tPanel.classList.toggle('showing');
-    var tShowing = JSON.parse(getStatsInput().value);
-    getStatsInput().value = !tShowing;
+    document.getElementById('panel').classList.toggle('showing');
+    setConwayData('stats', !getConwayData('stats'));
 }

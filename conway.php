@@ -10,13 +10,16 @@ $tPostArgsCount = count($_POST);
 $tToday = time();
 $tNow = milliseconds();
 
-if(isset($_POST["conway"]))
+if(isset($_POST["data"]))
 {
-    $pConway = $_POST["conway"];
+    $pData =$_POST["data"];
+    $tData = json_decode($pData, TRUE);
+    $pConway = $tData["conway"];
+    $pThen = $tData["then"];
+    $pShowStats = $tData["stats"];
+    $pUseHints = $tData["hints"];
     $pGuess = $_POST["guess"];
-    $pThen = $_POST["then"];
     $pTimes = json_decode($_POST["times"], TRUE);
-    $pShowStats = $_POST["stats"];
     $tAnswer = getDayIndex($pConway);
     $tCorrect = $tAnswer == $pGuess;
     $tYesNo = $pThen < 0 ? '(Skipped)' : ($tCorrect ? 'Correct!' : 'Wrong!');
@@ -27,17 +30,26 @@ if(isset($_POST["conway"]))
 else
 {
     $tTimes = "[]";
-    $pShowStats = "false";
+    $pShowStats = FALSE;
+    $pUseHints = TRUE;    
 }
+
+$tDate = randomDate('1800-01-01', '2199-12-31');
+$tData = json_encode([
+    "conway" => $tDate,
+    "then" => $tNow,
+    "stats" => $pShowStats,
+    "hints" => $pUseHints
+]);
+
 $pFlags = isset($_GET['flags']) ? $_GET['flags'] : 
     (isset($_POST['flags']) ? $_POST['flags'] : 42);
 $tPrintDebug = $pFlags == 73;
-$tDate = randomDate('1800-01-01', '2199-12-31');
 
 if ($tPrintDebug)
 {
     print "<!-- debugging output...\n";
-    printDebug("POST: then - '$pThen'; conway - '$pConway'; guess - '$pGuess'; flags - '$pFlags'; stats - '$pShowStats'");
+    printDebug("POST: data - '$pData'; guess - '$pGuess'; flags - '$pFlags'");
     printDebug("TEMPS: tAnswer - '$tAnswer'; tDay - '$tDay'");
     print "$t[1] ...end debugging output -->\n";
 }
@@ -69,10 +81,10 @@ function getDay($dayIndex)
 }
 
 // Print the days of the week as options for a select or drop-down list
-function printDayOptions($theDate)
+function printDayOptions($theDate, $useHints)
 {
     global $t;
-    $tKeyDays = getCenturyDays($theDate);
+    $tKeyDays = $useHints ? getCenturyDays($theDate) : ["","","","","","",""];
     foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex) 
     {
         $tDay = getDay($dayIndex);

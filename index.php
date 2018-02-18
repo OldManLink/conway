@@ -18,7 +18,7 @@
             <form id="theForm" action="/" method="POST">
                 <?
                 $tI = 0;
-                if($tPostArgsCount == 6)
+                if($tPostArgsCount == 4)
                 {
                     print "$t[$tI]<div id='answer' align=center>$tYesNo<br>$pConway<br>$tIsWas a<br>$tDay.</div>\n";
                     $tI = 4;
@@ -26,13 +26,11 @@
                 print "$t[$tI]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
                 print "$t[4]<div id='theDate' align=center>$tDate</div>\n";
                 print "$t[4]<div align=center><select name='guess'>\n";
-                printDayOptions($tDate);
+                printDayOptions($tDate, $pUseHints);
                 print "$t[4]</select></div>\n";
                 print "$t[4]<input type='hidden' name='flags' value=$pFlags>\n";
-                print "$t[4]<input type='hidden' name='conway' value=$tDate>\n";
-                print "$t[4]<input type='hidden' name='then' value=$tNow>\n";
+                print "$t[4]<input type='hidden' name='data' value=$tData>\n";
                 print "$t[4]<input type='hidden' name='times' value=$tTimes>\n";
-                print "$t[4]<input type='hidden' name='stats' value=$pShowStats>\n";
                 print "$t[4]<button id='conway_submit'>Guess</button>\n";
                 print "$t[4]<button type='button' disabled id='drawerHandle'>&nbsp;</button>\n";
                 ?>

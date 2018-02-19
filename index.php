@@ -15,26 +15,32 @@
     <? include_once "conway.php"; ?>
     <body onLoad= addStatsPanel()>
         <div id="container">
-            <form id="theForm" action="/" method="POST">
-                <?
-                $tI = 0;
-                if($tPostArgsCount == 4)
-                {
-                    print "$t[$tI]<div id='answer' align=center>$tYesNo<br>$pConway<br>$tIsWas a<br>$tDay.</div>\n";
-                    $tI = 4;
-                }
-                print "$t[$tI]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
+            <?
+            print "<form id='theForm' action='$tRoot' method='POST'>\n";
+            print "$t[4]<input type='hidden' name='flags' value=$pFlags>\n";
+            print "$t[4]<input type='hidden' name='times' value=$tTimes>\n";
+            print "$t[4]<input type='hidden' name='data' value=$tData>\n";
+            if($tPostArgsCount == 4)
+            {
+                print "$t[4]<div id='answer' align=center>$tYesNo<br>$pConway<br>$tIsWas a<br>$tDay.</div>\n";
+            }
+            if($pPaused)
+            {
+                print "$t[4]<div id='prompt' align=center>Please press<br>&quot;Resume&quot;<br>to continue.</div>\n";
+                print "$t[4]<button type='button' disabled id='conwaySubmit'>Guess</button>\n";
+            }
+            else
+            {
+                print "$t[4]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
                 print "$t[4]<div id='theDate' align=center>$tDate</div>\n";
                 print "$t[4]<div align=center><select name='guess'>\n";
                 printDayOptions($tDate, $pUseHints);
                 print "$t[4]</select></div>\n";
-                print "$t[4]<input type='hidden' name='flags' value=$pFlags>\n";
-                print "$t[4]<input type='hidden' name='data' value=$tData>\n";
-                print "$t[4]<input type='hidden' name='times' value=$tTimes>\n";
-                print "$t[4]<button id='conway_submit'>Guess</button>\n";
-                print "$t[4]<button type='button' disabled id='drawerHandle'>&nbsp;</button>\n";
-                ?>
-            </form>
+                print "$t[4]<button id='conwaySubmit'>Guess</button>\n";
+            }
+            print "$t[4]<button type='button' disabled id='drawerHandle'>&nbsp;</button>\n";
+            print "$t[3]</form>\n"
+            ?>
         </div>
     </body>
 </html>

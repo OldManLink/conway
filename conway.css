@@ -118,7 +118,7 @@ label
 
 #panel.showing
 {
-    height: 175px;
+    height: 170px;
 }
 
 #drawerHandle
@@ -163,7 +163,7 @@ label
     margin: 10px;
 }
 
-button[id^="conway_"]
+button[id^="conway"]
 {
     border: 2px solid #c0c0c0;
     border-radius: 6px;
@@ -197,14 +197,21 @@ button[id^="conway_"]
     background: -o-linear-gradient(top, #ffcc88, #ff7700);
 }
 
-button[id^="conway_"]:hover 
+button[id^="conway"]:hover
 {
     border-color: #808080;
 }
 
-button[id^="conway_"]:focus
+button[id^="conway"]:focus
 {
     outline:0;
+}
+
+button[id^="conway_"]
+{
+    width: 45%;
+    margin: 5px;
+    display: inline-block;
 }
 
 /* Tablet Landscape */

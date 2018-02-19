@@ -5,42 +5,41 @@ ini_set('display_errors', 1);
 // Set up tab stops: $t[0] = no tabs, $t[9] = 9 tabs. 1 tab = 4 spaces.
 unset($t);$t[0]="";for($i=1;$i<10;$i++)$t[$i]=$t[$i-1]."    ";
 
+$tRequestParts = explode("/", $_SERVER['REQUEST_URI']);
+$tRequestParts[count($tRequestParts) - 1] = "";
+$tRoot = implode("/", $tRequestParts);
 $tGetArgsCount = count($_GET);
 $tPostArgsCount = count($_POST);
+$tPostData = isset($_POST["data"]) ? $_POST["data"] : NULL;
+$pData = getPostedData($tPostData);
+$pUseHints = $pData["hints"];
+$pPaused = $pData["pause"];
 $tToday = time();
 $tNow = milliseconds();
 
-if(isset($_POST["data"]))
+if(isset($pData["conway"]))
 {
-    $pData =$_POST["data"];
-    $tData = json_decode($pData, TRUE);
-    $pConway = $tData["conway"];
-    $pThen = $tData["then"];
-    $pShowStats = $tData["stats"];
-    $pUseHints = $tData["hints"];
-    $pGuess = $_POST["guess"];
+    $pConway = $pData["conway"];
+    $pThen = $pData["then"];
+    $pGuess = isset($_POST["guess"]) ? $_POST["guess"] : 0;
     $pTimes = json_decode($_POST["times"], TRUE);
     $tAnswer = getDayIndex($pConway);
     $tCorrect = $tAnswer == $pGuess;
-    $tYesNo = $pThen < 0 ? '(Skipped)' : ($tCorrect ? 'Correct!' : 'Wrong!');
+    $tYesNo = $pPaused ? '(Paused)' : ($pThen < 0 ? '(Skipped)' : ($tCorrect ? 'Correct!' : 'Wrong!'));
     $tIsWas = (strtotime($pConway) <= $tToday) ? 'was' : 'will be';
     $tDay = getDay($tAnswer);
-    $tTimes = logTime($pTimes, $pThen, $tNow, $tCorrect);
+    $tTimes = logTime($pTimes, $pThen, $tNow, $tCorrect, $pPaused);
 }
 else
 {
     $tTimes = "[]";
-    $pShowStats = FALSE;
-    $pUseHints = TRUE;    
 }
 
 $tDate = randomDate('1800-01-01', '2199-12-31');
-$tData = json_encode([
-    "conway" => $tDate,
-    "then" => $tNow,
-    "stats" => $pShowStats,
-    "hints" => $pUseHints
-]);
+$tNewData = $pData;
+$tNewData["conway"] = $tDate;
+$tNewData["then"] = $tNow;
+$tData = json_encode($tNewData);
 
 $pFlags = isset($_GET['flags']) ? $_GET['flags'] : 
     (isset($_POST['flags']) ? $_POST['flags'] : 42);
@@ -49,9 +48,16 @@ $tPrintDebug = $pFlags == 73;
 if ($tPrintDebug)
 {
     print "<!-- debugging output...\n";
-    printDebug("POST: data - '$pData'; guess - '$pGuess'; flags - '$pFlags'");
-    printDebug("TEMPS: tAnswer - '$tAnswer'; tDay - '$tDay'");
+    printDebug("POST: data - '$tPostData'; guess - '$pGuess'; flags - '$pFlags'");
+    printDebug("TEMPS: tRoot - '$tRoot'; tAnswer - '$tAnswer'; tDay - '$tDay'");
     print "$t[1] ...end debugging output -->\n";
+}
+
+// Get and return the Posted JSON data object if it exists, and create a new one if not
+function getPostedData($pPostData)
+{
+    $tJsonData = json_decode($pPostData, TRUE);
+    return is_null($tJsonData) ? ["hints" => TRUE, "stats" => FALSE, "pause" => FALSE] : $tJsonData;
 }
 
 // Find a random Date between $start_date and $end_date
@@ -113,15 +119,18 @@ function milliseconds()
 }
 
 // Add the latest time taken to the times history and return the array as a JSON string
-function logTime($pTimes, $pThen, $pNow, $pCorrect)
+function logTime($pTimes, $pThen, $pNow, $pCorrect, $pPaused)
 {
     $tResult = array();
-    $tNext = $pThen < 0 ? 0 : ($pCorrect ? $pNow - $pThen : -1);
     foreach ($pTimes as $pTime)
     {
         array_push($tResult, $pTime);
     }
-    array_push($tResult, $tNext);
+    if (!$pPaused && $pThen != 0)
+    {
+        $tNext = $pThen < 0 ? 0 : ($pCorrect ? $pNow - $pThen : -1);
+        array_push($tResult, $tNext);
+    }
     return json_encode($tResult);
 }
 

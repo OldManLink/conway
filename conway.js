@@ -9,6 +9,7 @@
     var tContainer = document.getElementById('container');
     tContainer.appendChild(getPanel());
     tContainer.appendChild(getDrawerButton());
+    setPauseResumeText();
 }
 
 function getPanel()
@@ -19,7 +20,7 @@ function getPanel()
     if(tShowing) tPanel.classList.add('showing');
     tPanel.appendChild(getStats());
     tPanel.appendChild(getHints());
-    tPanel.appendChild(getSkipButton());
+    tPanel.appendChild(getSkipPauseButtons());
     return tPanel;
 }
 
@@ -49,15 +50,17 @@ function getHints()
     var tHints = document.createElement('div');
     tHints.id = 'hints';
     tHints.align = 'center';
-    var cb = document.createElement('input');
-    cb.id = 'useHints';
-    cb.type = 'checkbox';
-    cb.checked = getConwayData('hints');
-    cb.addEventListener('click', updateHints);
-    tHints.appendChild(cb);
-    var label = document.createElement('span');
-    label.innerHTML = ' use Century hints';
-    tHints.appendChild(label);
+    var tLabel = document.createElement('label');
+    var tCheckbox = document.createElement('input');
+    tCheckbox.id = 'useHints';
+    tCheckbox.type = 'checkbox';
+    tCheckbox.checked = getConwayData('hints');
+    tCheckbox.addEventListener('click', updateHints);
+    tLabel.appendChild(tCheckbox);
+    var tText = document.createElement('span');
+    tText.innerHTML = ' use Century hints';
+    tLabel.appendChild(tText);
+    tHints.appendChild(tLabel);
     return tHints;
 }
 
@@ -88,6 +91,15 @@ function getStatsText()
     }
 }
 
+function getSkipPauseButtons()
+{
+    var tButtons = document.createElement('div');
+    tButtons.align = 'center';
+    tButtons.appendChild(getSkipButton());
+    tButtons.appendChild(getPauseButton());
+    return tButtons;
+}
+
 function getSkipButton()
 {
     var tSkip = document.createElement('button');
@@ -99,8 +111,33 @@ function getSkipButton()
 
 function skipGuess()
 {
-    setConwayData('then', -1);
+    if(!getConwayData('pause'))
+    {
+        setConwayData('then', -1);
+        document.getElementById('theForm').submit();
+    }
+}
+
+function getPauseButton()
+{
+    var tPause = document.createElement('button');
+    tPause.id = 'conway_pause';
+    tPause.addEventListener('click', pauseResume);
+    return tPause;
+}
+
+function pauseResume()
+{
+    setConwayData('pause', !getConwayData('pause'));
+    setConwayData('then', 0);
+    setPauseResumeText();
     document.getElementById('theForm').submit();
+}
+
+function setPauseResumeText()
+{
+    var tPaused = getConwayData('pause');
+    document.getElementById('conway_pause').innerHTML = tPaused ? 'Resume' : 'Pause';
 }
 
 function removeDummyDrawerButton()

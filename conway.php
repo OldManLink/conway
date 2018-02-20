@@ -22,17 +22,17 @@ if(isset($pData["conway"]))
     $pConway = $pData["conway"];
     $pThen = $pData["then"];
     $pGuess = isset($_POST["guess"]) ? $_POST["guess"] : 0;
-    $pTimes = json_decode($_POST["times"], TRUE);
+    $pGuesses = json_decode($_POST["guesses"], TRUE);
     $tAnswer = getDayIndex($pConway);
     $tCorrect = $tAnswer == $pGuess;
-    $tYesNo = $pPaused ? '(Paused)' : ($pThen < 0 ? '(Skipped)' : ($tCorrect ? 'Correct!' : 'Wrong!'));
+    $tYesNo = $pPaused ? '(Paused)' : ($tCorrect ? 'Correct!' : 'Wrong!');
     $tIsWas = (strtotime($pConway) <= $tToday) ? 'was' : 'will be';
     $tDay = getDay($tAnswer);
-    $tTimes = logTime($pTimes, $pThen, $tNow, $tCorrect, $pPaused);
+    $tGuesses = logGuess($pGuesses, $pThen, $tNow, $tCorrect, $pPaused);
 }
 else
 {
-    $tTimes = "[]";
+    $tGuesses = "[]";
 }
 
 $tDate = randomDate('1800-01-01', '2199-12-31');
@@ -118,17 +118,17 @@ function milliseconds()
     return ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
 }
 
-// Add the latest time taken to the times history and return the array as a JSON string
-function logTime($pTimes, $pThen, $pNow, $pCorrect, $pPaused)
+// Add the latest guess to the guesses history and return the array as a JSON string
+function logGuess($pGuesses, $pThen, $pNow, $pCorrect, $pPaused)
 {
     $tResult = array();
-    foreach ($pTimes as $pTime)
+    foreach ($pGuesses as $pGuess)
     {
-        array_push($tResult, $pTime);
+        array_push($tResult, $pGuess);
     }
-    if (!$pPaused && $pThen != 0)
+    if (!$pPaused)
     {
-        $tNext = $pThen < 0 ? 0 : ($pCorrect ? $pNow - $pThen : -1);
+        $tNext = $pCorrect ? $pNow - $pThen : -1;
         array_push($tResult, $tNext);
     }
     return json_encode($tResult);

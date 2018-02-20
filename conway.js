@@ -20,7 +20,7 @@ function getPanel()
     if(tShowing) tPanel.classList.add('showing');
     tPanel.appendChild(getStats());
     tPanel.appendChild(getHints());
-    tPanel.appendChild(getSkipPauseButtons());
+    tPanel.appendChild(getPauseButton());
     return tPanel;
 }
 
@@ -35,6 +35,11 @@ function setConwayData(attribute, value)
     var data = JSON.parse(document.getElementsByName('data')[0].value);
     data[attribute] = value;
     document.getElementsByName('data')[0].value = JSON.stringify(data);
+}
+
+function toggleConwayData(booleanAttribute)
+{
+    setConwayData(booleanAttribute, !getConwayData(booleanAttribute));
 }
 
 function getStats()
@@ -72,49 +77,20 @@ function updateHints()
 
 function getStatsText()
 {
-    var tTimes = JSON.parse(document.getElementsByName('times')[0].value);
-    var tSkips = tTimes.filter(function(time) { return time === 0; }).length;
-    var tGuesses = tTimes.filter(function(time) { return time !== 0; });
-    var tSuccesses = tGuesses.filter(function(time) { return time !== -1; });
+    var tGuesses = JSON.parse(document.getElementsByName('guesses')[0].value);
+    var tSuccesses = tGuesses.filter(function(guess) { return guess !== -1; });
     var tSuccessRate = Math.round(tSuccesses.length / tGuesses.length * 1000) / 10;
     var tTotalTime = tSuccesses.reduce(function(acc, val) { return acc + val; }, 0);
     var tAverageTime = Math.round(tTotalTime / tSuccesses.length / 10) / 100;
     if (isNaN(tSuccessRate) || isNaN(tAverageTime))
     {
         return 'Insufficient data for success rate/average time.<br>'
-            + 'Skipped: ' + tSkips;
+            + 'Guesses: ' + tGuesses.length;
     } else
     {
         return 'Success rate: ' + tSuccessRate + '%<br>'
             + 'Average time: ' + tAverageTime + ' secs<br>'
-            + 'Guesses: ' + tGuesses.length + ', Skipped: ' + tSkips;
-    }
-}
-
-function getSkipPauseButtons()
-{
-    var tButtons = document.createElement('div');
-    tButtons.align = 'center';
-    tButtons.appendChild(getSkipButton());
-    tButtons.appendChild(getPauseButton());
-    return tButtons;
-}
-
-function getSkipButton()
-{
-    var tSkip = document.createElement('button');
-    tSkip.id = 'conway_skip';
-    tSkip.innerHTML = 'Skip';
-    tSkip.addEventListener('click', skipGuess);
-    return tSkip;
-}
-
-function skipGuess()
-{
-    if(!getConwayData('pause'))
-    {
-        setConwayData('then', -1);
-        document.getElementById('theForm').submit();
+            + 'Guesses: ' + tGuesses.length;
     }
 }
 
@@ -128,16 +104,15 @@ function getPauseButton()
 
 function pauseResume()
 {
-    setConwayData('pause', !getConwayData('pause'));
-    setConwayData('then', 0);
+    toggleConwayData('pause');
     setPauseResumeText();
     document.getElementById('theForm').submit();
 }
 
 function setPauseResumeText()
 {
-    var tPaused = getConwayData('pause');
-    document.getElementById('conway_pause').innerHTML = tPaused ? 'Resume' : 'Pause';
+    var tPauseButton = document.getElementById('conway_pause');
+    tPauseButton.innerHTML = getConwayData('pause') ? 'Resume' : 'Pause';
 }
 
 function removeDummyDrawerButton()
@@ -158,5 +133,5 @@ function getDrawerButton()
 function togglePanelShowing()
 {
     document.getElementById('panel').classList.toggle('showing');
-    setConwayData('stats', !getConwayData('stats'));
+    toggleConwayData('stats');
 }

@@ -18,7 +18,7 @@
             <?
             print "<form id='theForm' action='$tRoot' method='POST'>\n";
             print "$t[4]<input type='hidden' name='flags' value=$pFlags>\n";
-            print "$t[4]<input type='hidden' name='times' value=$tTimes>\n";
+            print "$t[4]<input type='hidden' name='guesses' value=$tGuesses>\n";
             print "$t[4]<input type='hidden' name='data' value=$tData>\n";
             if($tPostArgsCount == 4)
             {

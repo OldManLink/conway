@@ -2,8 +2,20 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Default definitions to make IntelliJ happy
+$t = [];
+$pGuess = 0;
+$tAnswer = 0;
+$tDay = "Undefined";
+$pFlags = 42;
+$tGuesses = [];
+$tYesNo = "Undefined";
+$pConway = "Undefined";
+$tIsWas = "Undefined";
+$pPaused = FALSE;
+
 // Set up tab stops: $t[0] = no tabs, $t[9] = 9 tabs. 1 tab = 4 spaces.
-unset($t);$t[0]="";for($i=1;$i<10;$i++)$t[$i]=$t[$i-1]."    ";
+$t[0]="";for($i=1; $i<10; $i++)$t[$i]=$t[$i-1]."    ";
 
 $tRequestParts = explode("/", $_SERVER['REQUEST_URI']);
 $tRequestParts[count($tRequestParts) - 1] = "";
@@ -12,7 +24,6 @@ $tGetArgsCount = count($_GET);
 $tPostArgsCount = count($_POST);
 $tPostData = isset($_POST["data"]) ? $_POST["data"] : NULL;
 $pData = getPostedData($tPostData);
-$pUseHints = $pData["hints"];
 $pPaused = $pData["pause"];
 $tToday = time();
 $tNow = milliseconds();
@@ -38,11 +49,18 @@ else
 $tDate = randomDate('1800-01-01', '2199-12-31');
 $tNewData = $pData;
 $tNewData["conway"] = $tDate;
+$tNewData["century"] = getCenturyDay($tDate);
 $tNewData["then"] = $tNow;
 $tData = json_encode($tNewData);
 
-$pFlags = isset($_GET['flags']) ? $_GET['flags'] : 
-    (isset($_POST['flags']) ? $_POST['flags'] : 42);
+if(isset($_GET['flags']))
+{
+    $pFlags = $_GET['flags'];
+}
+if(isset($_POST['flags']))
+{
+    $pFlags = $_POST['flags'];
+}
 $tPrintDebug = $pFlags == 73;
 
 if ($tPrintDebug)
@@ -57,7 +75,7 @@ if ($tPrintDebug)
 function getPostedData($pPostData)
 {
     $tJsonData = json_decode($pPostData, TRUE);
-    return is_null($tJsonData) ? ["hints" => TRUE, "stats" => FALSE, "pause" => FALSE] : $tJsonData;
+    return is_null($tJsonData) ? ["stats" => FALSE, "pause" => FALSE] : $tJsonData;
 }
 
 // Find a random Date between $start_date and $end_date
@@ -87,28 +105,21 @@ function getDay($dayIndex)
 }
 
 // Print the days of the week as options for a select or drop-down list
-function printDayOptions($theDate, $useHints)
+function printDayOptions()
 {
     global $t;
-    $tKeyDays = $useHints ? getCenturyDays($theDate) : ["","","","","","",""];
-    foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex) 
+    foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex)
     {
         $tDay = getDay($dayIndex);
-        print "$t[5]<option $tKeyDays[$dayIndex]value='$dayIndex'>$tDay</option>\n";
+        print "$t[6]<option value='$dayIndex'>$tDay</option>\n";
     }
 }
 
-// Used together with `printDayOptions` to select the key day for the century
-function getCenturyDays($theDate)
+// Return the key day for the century
+function getCenturyDay($theDate)
 {
     $tCentury = intval(date('Y', strtotime($theDate)) / 100);
-    $tKeyDay = (2 + 5 * ($tCentury % 4)) % 7;
-    $tCDays = array();
-    foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex) 
-    {
-        $tCDays[$dayIndex] = $dayIndex == $tKeyDay ? "selected " : "";
-    }
-    return $tCDays;
+    return (2 + 5 * ($tCentury % 4)) % 7;
 }
 
 // returns the current unix timestamp in milliseconds
@@ -140,4 +151,3 @@ function printDebug($message)
     global $tPrintDebug, $t;
     if ($tPrintDebug) print "$t[1]$message\n";
 }
-?>

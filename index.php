@@ -33,9 +33,11 @@
             {
                 print "$t[4]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
                 print "$t[4]<div id='theDate' align=center>$tDate</div>\n";
-                print "$t[4]<div align=center><select name='guess'>\n";
-                printDayOptions($tDate, $pUseHints);
-                print "$t[4]</select></div>\n";
+                print "$t[4]<div align=center>\n";
+                    print "$t[5]<select name='guess'>\n";
+                        printDayOptions();
+                    print "$t[5]</select>\n";
+                print "$t[4]</div>\n";
                 print "$t[4]<button id='conwaySubmit'>Guess</button>\n";
             }
             print "$t[4]<button type='button' disabled id='drawerHandle'>&nbsp;</button>\n";

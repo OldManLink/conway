@@ -82,7 +82,7 @@ label
     border: 1px solid #111;
     border-radius: 7px;
     margin: 30px auto;
-    width: 310px;
+    width: 320px;
 }
 
 #statistics
@@ -93,11 +93,6 @@ label
     text-align: -webkit-center;
     min-height: 28px;
     overflow: auto; /* Automatic scrollbars like a frame */
-}
-
-#hints span
-{
-    font-size:75%;
 }
 
 #container form
@@ -118,7 +113,7 @@ label
 
 #panel.showing
 {
-    height: 170px;
+    height: 134px;
 }
 
 #drawerHandle

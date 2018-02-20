@@ -19,7 +19,6 @@ function getPanel()
     tPanel.id = 'panel';
     if(tShowing) tPanel.classList.add('showing');
     tPanel.appendChild(getStats());
-    tPanel.appendChild(getHints());
     tPanel.appendChild(getPauseButton());
     return tPanel;
 }
@@ -50,31 +49,6 @@ function getStats()
     return tStats;
 }
 
-function getHints()
-{
-    var tHints = document.createElement('div');
-    tHints.id = 'hints';
-    tHints.align = 'center';
-    var tLabel = document.createElement('label');
-    var tCheckbox = document.createElement('input');
-    tCheckbox.id = 'useHints';
-    tCheckbox.type = 'checkbox';
-    tCheckbox.checked = getConwayData('hints');
-    tCheckbox.addEventListener('click', updateHints);
-    tLabel.appendChild(tCheckbox);
-    var tText = document.createElement('span');
-    tText.innerHTML = ' use Century hints';
-    tLabel.appendChild(tText);
-    tHints.appendChild(tLabel);
-    return tHints;
-}
-
-function updateHints()
-{
-    var tChecked = document.getElementById('useHints').checked;
-    setConwayData('hints', tChecked);
-}
-
 function getStatsText()
 {
     var tGuesses = JSON.parse(document.getElementsByName('guesses')[0].value);
@@ -84,7 +58,7 @@ function getStatsText()
     var tAverageTime = Math.round(tTotalTime / tSuccesses.length / 10) / 100;
     if (isNaN(tSuccessRate) || isNaN(tAverageTime))
     {
-        return 'Insufficient data for success rate/average time.<br>'
+        return 'Insufficient data to display<br>success rate/average time.<br>'
             + 'Guesses: ' + tGuesses.length;
     } else
     {

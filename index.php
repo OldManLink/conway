@@ -27,7 +27,7 @@
             if($pPaused)
             {
                 print "$t[4]<div id='prompt' align=center>Please press<br>&quot;Resume&quot;<br>to continue.</div>\n";
-                print "$t[4]<button type='button' disabled id='conwaySubmit'>Guess</button>\n";
+                print "$t[4]<button type='button' id='conwaySubmit' onclick='pauseResume()'>Resume</button>\n";
             }
             else
             {

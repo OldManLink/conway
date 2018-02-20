@@ -9,7 +9,6 @@
     var tContainer = document.getElementById('container');
     tContainer.appendChild(getPanel());
     tContainer.appendChild(getDrawerButton());
-    setPauseResumeText();
 }
 
 function getPanel()
@@ -19,7 +18,10 @@ function getPanel()
     tPanel.id = 'panel';
     if(tShowing) tPanel.classList.add('showing');
     tPanel.appendChild(getStats());
-    tPanel.appendChild(getPauseButton());
+    if(!getConwayData('pause'))
+    {
+        tPanel.appendChild(getPauseButton());
+    }
     return tPanel;
 }
 
@@ -72,6 +74,7 @@ function getPauseButton()
 {
     var tPause = document.createElement('button');
     tPause.id = 'conway_pause';
+    tPause.innerHTML = 'Pause';
     tPause.addEventListener('click', pauseResume);
     return tPause;
 }
@@ -80,14 +83,7 @@ function pauseResume()
 {
     toggleConwayData('pause');
     setConwayData('then', 0);
-    setPauseResumeText();
     document.getElementById('theForm').submit();
-}
-
-function setPauseResumeText()
-{
-    var tPauseButton = document.getElementById('conway_pause');
-    tPauseButton.innerHTML = getConwayData('pause') ? 'Resume' : 'Pause';
 }
 
 function removeDummyDrawerButton()

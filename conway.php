@@ -126,7 +126,7 @@ function logGuess($pGuesses, $pThen, $pNow, $pCorrect, $pPaused)
     {
         array_push($tResult, $pGuess);
     }
-    if (!$pPaused)
+    if (!$pPaused && $pThen != 0)
     {
         $tNext = $pCorrect ? $pNow - $pThen : -1;
         array_push($tResult, $tNext);

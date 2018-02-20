@@ -105,6 +105,7 @@ function getPauseButton()
 function pauseResume()
 {
     toggleConwayData('pause');
+    setConwayData('then', 0);
     setPauseResumeText();
     document.getElementById('theForm').submit();
 }

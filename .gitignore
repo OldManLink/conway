@@ -35,6 +35,9 @@ cmake-build-debug/
 # IntelliJ
 out/
 
+# Mac OSX
+.DS_Store
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 

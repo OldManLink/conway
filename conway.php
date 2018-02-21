@@ -111,7 +111,7 @@ function printDayOptions()
     foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex)
     {
         $tDay = getDay($dayIndex);
-        print "$t[6]<option value='$dayIndex'>$tDay</option>\n";
+        print "$t[7]<option value='$dayIndex'>$tDay</option>\n";
     }
 }
 

@@ -26,19 +26,23 @@
             }
             if($pPaused)
             {
-                print "$t[4]<div id='prompt' align=center>Please press<br>&quot;Resume&quot;<br>to continue.</div>\n";
-                print "$t[4]<button type='button' id='conwaySubmit' onclick='pauseResume()'>Resume</button>\n";
+                print "$t[4]<div id='ui' name='paused'>\n";
+                print "$t[5]<div id='prompt' align=center>Please press<br>&quot;Resume&quot;<br>to continue.</div>\n";
+                print "$t[5]<button type='button' id='conwaySubmit' onclick='pauseResume()'>Resume</button>\n";
+                print "$t[4]</div>\n";
             }
             else
             {
-                print "$t[4]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
-                print "$t[4]<div id='theDate' align=center>$tDate</div>\n";
-                print "$t[4]<div align=center>\n";
-                    print "$t[5]<select name='guess'>\n";
+                print "$t[4]<div id='ui' name='standard'>\n";
+                print "$t[5]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
+                print "$t[5]<div id='theDate' align=center>$tDate</div>\n";
+                print "$t[5]<div align=center>\n";
+                    print "$t[6]<select name='guess'>\n";
                         printDayOptions();
-                    print "$t[5]</select>\n";
+                    print "$t[6]</select>\n";
+                print "$t[5]</div>\n";
+                print "$t[5]<button id='conwaySubmit'>Guess</button>\n";
                 print "$t[4]</div>\n";
-                print "$t[4]<button id='conwaySubmit'>Guess</button>\n";
             }
             print "$t[4]<button type='button' disabled id='drawerHandle'>&nbsp;</button>\n";
             print "$t[3]</form>\n"

@@ -2,13 +2,17 @@
  * Auxilliary functions to make the statistics work
  *
  */
- 
- function addStatsPanel()
+
+var pendingUI = null;
+
+function addStatsPanel()
 {
-    removeDummyDrawerButton();
+    var tButton = document.getElementById('drawerHandle');
+    tButton.parentNode.removeChild(tButton);
     var tContainer = document.getElementById('container');
     tContainer.appendChild(getPanel());
     tContainer.appendChild(getDrawerButton());
+    selectUI();
 }
 
 function getPanel()
@@ -18,6 +22,7 @@ function getPanel()
     tPanel.id = 'panel';
     if(tShowing) tPanel.classList.add('showing');
     tPanel.appendChild(getStats());
+    tPanel.appendChild(getUISelect());
     if(!getConwayData('pause'))
     {
         tPanel.appendChild(getPauseButton());
@@ -27,15 +32,20 @@ function getPanel()
 
 function getConwayData(attribute)
 {
-    var data = JSON.parse(document.getElementsByName('data')[0].value);
+    var data = JSON.parse(getConwayElement().value);
     return data[attribute];
 }
 
 function setConwayData(attribute, value)
 {
-    var data = JSON.parse(document.getElementsByName('data')[0].value);
+    var data = JSON.parse(getConwayElement().value);
     data[attribute] = value;
-    document.getElementsByName('data')[0].value = JSON.stringify(data);
+    getConwayElement().value = JSON.stringify(data);
+}
+
+function getConwayElement()
+{
+    return document.getElementsByName('data')[0];
 }
 
 function toggleConwayData(booleanAttribute)
@@ -86,18 +96,178 @@ function pauseResume()
     document.getElementById('theForm').submit();
 }
 
-function removeDummyDrawerButton()
+function getUISelect()
 {
-    var tButton = document.getElementById('drawerHandle');
-    tButton.parentNode.removeChild(tButton);
+    var tUISelect = document.createElement('div');
+    tUISelect.id = 'uiSelect';
+    var tLabel = document.createElement('span');
+    tLabel.innerHTML='Interface: ';
+    tUISelect.appendChild(tLabel);
+    var tSelect = document.createElement('select');
+    tSelect.id = 'uiSelector';
+    tSelect.appendChild(getUIOption('standard', 'Standard'));
+    tSelect.appendChild(getUIOption('hints', 'Century Hints'));
+    tSelect.appendChild(getUIOption('speed', 'Speed Practice'));
+    tSelect.addEventListener('change', selectUI);
+    tUISelect.appendChild(tSelect);
+    return tUISelect;
+}
+
+function getUIOption(uiType, uiName)
+{
+    var tSelected = getConwayData('ui') === uiType;
+    var tOption = document.createElement('option');
+    tOption.value=uiType;
+    tOption.innerHTML=uiName;
+    if(tSelected)
+    {
+        tOption.selected='selected';
+    }
+    else
+    {
+        tOption.removeAttribute('selected');
+    }
+    return tOption;
+}
+
+function selectUI()
+{
+    var tSelectedUIName = getSelectedUIName();
+    setConwayData('ui', tSelectedUIName);
+    switchUI(getCurrentUIName(), tSelectedUIName)
+}
+
+function switchUI(oldUIName, newUIName)
+{
+    if(oldUIName !== 'paused' && oldUIName !== newUIName)
+    {
+        if ([oldUIName, newUIName].indexOf('speed') >= 0)
+        {
+            var tPendingUI = getPendingUI();
+            var tOldUI = getCurrentUI();
+            var tForm = tOldUI.parentNode;
+            tForm.removeChild(tOldUI);
+            tForm.appendChild(tPendingUI);
+            setPendingUI(tOldUI);
+        }
+        if(newUIName !== 'speed')
+        {
+            if(getCurrentUIName() !== newUIName)
+            {
+                var tSelectionIndex;
+                if(newUIName === 'standard')
+                {
+                    tSelectionIndex = 0;
+                }
+                else
+                {
+                    tSelectionIndex = (getConwayData('century') + 6) % 7;
+                }
+                document.getElementsByName('guess')[0].selectedIndex = tSelectionIndex;
+                getCurrentUI().setAttribute('name', newUIName);
+            }
+        }
+    }
+}
+
+function getCurrentUIName()
+{
+    return getCurrentUI().getAttribute('name');
+}
+
+function getCurrentUI()
+{
+    return document.getElementById('ui');
+}
+
+function getSelectedUIName()
+{
+    var tUIList = document.getElementById('uiSelector');
+    var tSelectedUIOption = tUIList.options[tUIList.selectedIndex];
+    return tSelectedUIOption.value;
+}
+
+function getPendingUI()
+{
+    if(pendingUI === null)
+    {
+        pendingUI = getSpeedUI();
+    }
+    return pendingUI;
+}
+
+function setPendingUI(theUI)
+{
+    pendingUI = theUI;
+}
+
+function getSpeedUI()
+{
+    var tSpeedUI = document.createElement('div');
+    tSpeedUI.id = 'ui';
+    tSpeedUI.setAttribute('name', 'speed');
+    tSpeedUI.align='center';
+    var tGuess = document.createElement('input');
+    tGuess.setAttribute('name', 'guess');
+    tGuess.type='hidden';
+    tSpeedUI.appendChild(tGuess);
+    var tTopRow = document.createElement('div');
+    tTopRow.align='center';
+    addDayButton(tTopRow, 'conwaySpeed_We', 3, '&nbsp;W&nbsp;');
+    addDayButton(tTopRow, 'conwaySpeed_Th', 4, '&nbsp;T&nbsp;');
+    addDayButton(tTopRow, 'conwaySpeed_Fr', 5, '&nbsp;F&nbsp;');
+    tSpeedUI.appendChild(tTopRow);
+    var tMiddleRow = document.createElement('div');
+    tMiddleRow.align='center';
+    addDayButton(tMiddleRow, 'conwaySpeed_Tu', 2, '&nbsp;T&nbsp;');
+    tMiddleRow.appendChild(getSpeedDate());
+    addDayButton(tMiddleRow, 'conwaySpeed_Sa', 6, '&nbsp;S&nbsp;');
+    tSpeedUI.appendChild(tMiddleRow);
+    var tBottomRow = document.createElement('div');
+    tBottomRow.align='center';
+    addDayButton(tBottomRow, 'conwaySpeed_Mo', 1, '&nbsp;M&nbsp;');
+    addDayButton(tBottomRow, 'conwaySpeed_Su', 0, '&nbsp;S&nbsp;');
+    tSpeedUI.appendChild(tBottomRow);
+    return tSpeedUI;
+}
+
+function addDayButton(row, id, value, text)
+{
+    tButton = document.createElement('button');
+    tButton.id = id;
+    tButton.setAttribute('value', value);
+    tButton.innerHTML = text;
+    tButton.addEventListener('click', submitSpeed(value));
+    row.appendChild(tButton);
+}
+
+function submitSpeed(value)
+{
+    return function()
+    {
+        document.getElementsByName('guess')[0].value = value;
+    };
+}
+
+function getSpeedDate()
+{
+    var tSpeedDate = document.createElement('span');
+    tSpeedDate.id = 'speedDate';
+    tSpeedDate.align = 'center';
+    tSpeedDate.innerHTML = document.getElementById('theDate').innerHTML;
+    return tSpeedDate;
 }
 
 function getDrawerButton()
 {
-    var tButton = document.createElement('button');
-    tButton.id = 'drawerHandle';
-    tButton.innerHTML = '=';
-    tButton.addEventListener('click', togglePanelShowing);
+    var tButton = document.getElementById('drawerHandle');
+    if (tButton === null)
+    {
+        tButton = document.createElement('button');
+        tButton.id = 'drawerHandle';
+        tButton.innerHTML = '=';
+        tButton.addEventListener('click', togglePanelShowing);
+    }
     return tButton;
 }
 

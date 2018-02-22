@@ -281,3 +281,5 @@ function togglePanelShowing()
     document.getElementById('panel').classList.toggle('showing');
     toggleConwayData('stats');
 }
+
+document.addEventListener("DOMContentLoaded", addStatsPanel);

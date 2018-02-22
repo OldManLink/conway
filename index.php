@@ -13,7 +13,7 @@
         <link rel="apple-touch-icon" sizes="144x144" href="icons/conway_144.png" />
     </head>
     <? include_once "conway.php"; ?>
-    <body onLoad='addStatsPanel()'>
+    <body>
         <div id='container'>
             <?
             print "<form id='theForm' action='$tRoot' method='POST'>\n";
@@ -23,15 +23,14 @@
             if($pPaused)
             {
                 print "$t[4]<div id='ui' name='paused'>\n";
-                printAnswerDivs();
                 print "$t[5]<div id='prompt' align=center>Please press<br>&quot;Resume&quot;<br>to continue.</div>\n";
                 print "$t[5]<button type='button' id='conwaySubmit' onclick='pauseResume()'>Resume</button>\n";
+                printAnswerDivs();
                 print "$t[4]</div>\n";
             }
             else
             {
                 print "$t[4]<div id='ui' name='standard'>\n";
-                printAnswerDivs();
                 print "$t[5]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
                 print "$t[5]<div id='theDate' align=center>$tDate</div>\n";
                 print "$t[5]<div align=center>\n";
@@ -40,6 +39,7 @@
                     print "$t[6]</select>\n";
                 print "$t[5]</div>\n";
                 print "$t[5]<button id='conwaySubmit'>Guess</button>\n";
+                printAnswerDivs();
                 print "$t[4]</div>\n";
             }
             print "$t[4]<button type='button' disabled id='drawerHandle'>&nbsp;</button>\n";

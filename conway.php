@@ -12,7 +12,8 @@ $tGuesses = [];
 $pPaused = FALSE;
 
 // Set up tab stops: $t[0] = no tabs, $t[9] = 9 tabs. 1 tab = 4 spaces.
-$t[0]="";for($i=1; $i<10; $i++)$t[$i]=$t[$i-1]."    ";
+$t[0] = "";
+for ($i = 1; $i < 10; $i++) $t[$i] = $t[$i - 1] . "    ";
 
 $cData = isset($_COOKIE["ConwayData"]) ? $_COOKIE["ConwayData"] : NULL;
 
@@ -24,8 +25,7 @@ $pData = getPostedData($tPostData, $cData);
 $pPaused = $pData["pause"];
 $tNow = milliseconds();
 
-if(isset($pData["conway"]))
-{
+if (isset($pData["conway"])) {
     $pConway = $pData["conway"];
     $pThen = $pData["then"];
     $pGuess = isset($_POST["guess"]) ? $_POST["guess"] : 0;
@@ -33,9 +33,7 @@ if(isset($pData["conway"]))
     $tAnswer = getDayIndex($pConway);
     $tCorrect = $tAnswer == $pGuess;
     $tGuesses = logGuess($pGuesses, $pThen, $tNow, $tCorrect, $pPaused);
-}
-else
-{
+} else {
     $tGuesses = "[]";
 }
 
@@ -48,18 +46,15 @@ $tNewData["day"] = $pThen == 0 ? -1 : $tAnswer;
 setCookieData($tNewData);
 $tData = json_encode($tNewData);
 
-if(isset($_GET['flags']))
-{
+if (isset($_GET['flags'])) {
     $pFlags = $_GET['flags'];
 }
-if(isset($_POST['flags']))
-{
+if (isset($_POST['flags'])) {
     $pFlags = $_POST['flags'];
 }
 $tPrintDebug = $pFlags == 73;
 
-if ($tPrintDebug)
-{
+if ($tPrintDebug) {
     print "<!-- debugging output...\n";
     printDebug("POST: data - '$tPostData'; guess - '$pGuess'; flags - '$pFlags'");
     printDebug("TEMPS: tRoot - '$tRoot'; tAnswer - '$tAnswer'");
@@ -106,16 +101,18 @@ function getDay($dayIndex)
 function printAnswerDivs()
 {
     global $pConway, $tCorrect, $pPaused, $t;
-    if(count($_POST) == 4)
-    {
-        $tYesNo = $pPaused ? '(Paused)' : ($tCorrect ? 'Correct!' : 'Wrong!');
-        print "$t[5]<div class='answer' align=center>$tYesNo</div>\n";
-        if(!$tCorrect && !$pPaused)
+    if (count($_POST) == 4) {
+        if (!$pPaused)
         {
-            $tIsWas = (strtotime($pConway) <= time()) ? 'was' : 'will be';
-            $tDay = getDay(getDayIndex($pConway));
-            print "$t[5]<div class='answer' align=center>$pConway<br>$tIsWas a</div>\n";
-            print "$t[5]<div id='theDay' class='answer' align=center>$tDay</div>\n";
+            $tYesNo = $tCorrect ? 'Correct!' : 'Wrong!';
+            print "$t[5]<div class='answer' align=center>$tYesNo</div>\n";
+            if (!$tCorrect)
+            {
+                $tIsWas = (strtotime($pConway) <= time()) ? 'was' : 'will be';
+                $tDay = getDay(getDayIndex($pConway));
+                print "$t[5]<div class='answer' align=center>$pConway<br>$tIsWas a</div>\n";
+                print "$t[5]<div id='theDay' class='answer' align=center>$tDay</div>\n";
+            }
         }
     }
 }
@@ -124,8 +121,7 @@ function printAnswerDivs()
 function printDayOptions()
 {
     global $t;
-    foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex)
-    {
+    foreach (array(1, 2, 3, 4, 5, 6, 0) as $dayIndex) {
         $tDay = getDay($dayIndex);
         print "$t[7]<option value='$dayIndex'>$tDay</option>\n";
     }
@@ -149,12 +145,10 @@ function milliseconds()
 function logGuess($pGuesses, $pThen, $pNow, $pCorrect, $pPaused)
 {
     $tResult = array();
-    foreach ($pGuesses as $pGuess)
-    {
+    foreach ($pGuesses as $pGuess) {
         array_push($tResult, $pGuess);
     }
-    if (!$pPaused && $pThen != 0)
-    {
+    if (!$pPaused && $pThen != 0) {
         $tNext = $pCorrect ? $pNow - $pThen : -1;
         array_push($tResult, $tNext);
     }

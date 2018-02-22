@@ -13,20 +13,17 @@
         <link rel="apple-touch-icon" sizes="144x144" href="icons/conway_144.png" />
     </head>
     <? include_once "conway.php"; ?>
-    <body onLoad= addStatsPanel()>
-        <div id="container">
+    <body onLoad='addStatsPanel()'>
+        <div id='container'>
             <?
             print "<form id='theForm' action='$tRoot' method='POST'>\n";
             print "$t[4]<input type='hidden' name='flags' value=$pFlags>\n";
             print "$t[4]<input type='hidden' name='guesses' value=$tGuesses>\n";
             print "$t[4]<input type='hidden' name='data' value=$tData>\n";
-            if($tPostArgsCount == 4)
-            {
-                print "$t[4]<div id='answer' align=center>$tYesNo<br>$pConway<br>$tIsWas a<br>$tDay.</div>\n";
-            }
             if($pPaused)
             {
                 print "$t[4]<div id='ui' name='paused'>\n";
+                printAnswerDivs();
                 print "$t[5]<div id='prompt' align=center>Please press<br>&quot;Resume&quot;<br>to continue.</div>\n";
                 print "$t[5]<button type='button' id='conwaySubmit' onclick='pauseResume()'>Resume</button>\n";
                 print "$t[4]</div>\n";
@@ -34,6 +31,7 @@
             else
             {
                 print "$t[4]<div id='ui' name='standard'>\n";
+                printAnswerDivs();
                 print "$t[5]<div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>\n";
                 print "$t[5]<div id='theDate' align=center>$tDate</div>\n";
                 print "$t[5]<div align=center>\n";

@@ -145,7 +145,7 @@ label
     outline:0;
 }
 
-#answer
+.answer
 {
     font-size: 130%;
     margin: 10px;
@@ -221,6 +221,56 @@ button[id^="conwaySpeed_"]
     width: 20%;
     margin: 2px;
     display:inline-block;
+}
+
+button[id^="conwaySpeed_"].correctAnswer
+{
+    animation: pulse 1s 1;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        background-color: #ffdd00;
+
+        /* W3C */
+        background: linear-gradient(top, #ffcc88, #ff7700);
+
+        /* Safari 4-5, Chrome 1-9 */
+        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffcc88), to(#ff7700));
+
+        /* Safari 5.1, Chrome 10+ */
+        background: -webkit-linear-gradient(top, #ffcc88, #ff7700);
+
+        /* Firefox 3.6+ */
+        background: -moz-linear-gradient(top, #ffcc88, #ff7700);
+
+        /* IE 10 */
+        background: -ms-linear-gradient(top, #ffcc88, #ff7700);
+
+        /* Opera 11.10+ */
+        background: -o-linear-gradient(top, #ffcc88, #ff7700);
+    }
+    50% {
+        background-color: #90ee90;
+
+        /* W3C */
+        background: linear-gradient(top, #90ee90, #228b22);
+
+        /* Safari 4-5, Chrome 1-9 */
+        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#90ee90), to(#228b22));
+
+        /* Safari 5.1, Chrome 10+ */
+        background: -webkit-linear-gradient(top, #90ee90, #228b22);
+
+        /* Firefox 3.6+ */
+        background: -moz-linear-gradient(top, #90ee90, #228b22);
+
+        /* IE 10 */
+        background: -ms-linear-gradient(top, #90ee90, #228b22);
+
+        /* Opera 11.10+ */
+        background: -o-linear-gradient(top, #90ee90, #228b22);
+    }
 }
 
 /* Tablet Landscape */

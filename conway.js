@@ -203,6 +203,7 @@ function setPendingUI(theUI)
 
 function getSpeedUI()
 {
+    var tDay = getConwayData('day');
     var tSpeedUI = document.createElement('div');
     tSpeedUI.id = 'ui';
     tSpeedUI.setAttribute('name', 'speed');
@@ -213,28 +214,32 @@ function getSpeedUI()
     tSpeedUI.appendChild(tGuess);
     var tTopRow = document.createElement('div');
     tTopRow.align='center';
-    addDayButton(tTopRow, 'conwaySpeed_We', 3, '&nbsp;W&nbsp;');
-    addDayButton(tTopRow, 'conwaySpeed_Th', 4, '&nbsp;T&nbsp;');
-    addDayButton(tTopRow, 'conwaySpeed_Fr', 5, '&nbsp;F&nbsp;');
+    addDayButton(tTopRow, 'conwaySpeed_We', 3, '&nbsp;W&nbsp;', tDay);
+    addDayButton(tTopRow, 'conwaySpeed_Th', 4, '&nbsp;T&nbsp;', tDay);
+    addDayButton(tTopRow, 'conwaySpeed_Fr', 5, '&nbsp;F&nbsp;', tDay);
     tSpeedUI.appendChild(tTopRow);
     var tMiddleRow = document.createElement('div');
     tMiddleRow.align='center';
-    addDayButton(tMiddleRow, 'conwaySpeed_Tu', 2, '&nbsp;T&nbsp;');
+    addDayButton(tMiddleRow, 'conwaySpeed_Tu', 2, '&nbsp;T&nbsp;', tDay);
     tMiddleRow.appendChild(getSpeedDate());
-    addDayButton(tMiddleRow, 'conwaySpeed_Sa', 6, '&nbsp;S&nbsp;');
+    addDayButton(tMiddleRow, 'conwaySpeed_Sa', 6, '&nbsp;S&nbsp;', tDay);
     tSpeedUI.appendChild(tMiddleRow);
     var tBottomRow = document.createElement('div');
     tBottomRow.align='center';
-    addDayButton(tBottomRow, 'conwaySpeed_Mo', 1, '&nbsp;M&nbsp;');
-    addDayButton(tBottomRow, 'conwaySpeed_Su', 0, '&nbsp;S&nbsp;');
+    addDayButton(tBottomRow, 'conwaySpeed_Mo', 1, '&nbsp;M&nbsp;', tDay);
+    addDayButton(tBottomRow, 'conwaySpeed_Su', 0, '&nbsp;S&nbsp;', tDay);
     tSpeedUI.appendChild(tBottomRow);
     return tSpeedUI;
 }
 
-function addDayButton(row, id, value, text)
+function addDayButton(row, id, value, text, correctAnswer)
 {
     tButton = document.createElement('button');
     tButton.id = id;
+    if(value == correctAnswer)
+    {
+        tButton.classList.add('correctAnswer');
+    }
     tButton.setAttribute('value', value);
     tButton.innerHTML = text;
     tButton.addEventListener('click', submitSpeed(value));

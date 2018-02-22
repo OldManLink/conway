@@ -4,28 +4,24 @@ ini_set('display_errors', 1);
 
 // Default definitions to make IntelliJ happy
 $t = [];
-$pGuess = 0;
-$tAnswer = 0;
-$tDay = "Undefined";
+$tAnswer = -1;
+$pGuess = -1;
 $pFlags = 42;
+$pThen = 0;
 $tGuesses = [];
-$tYesNo = "Undefined";
-$pConway = "Undefined";
-$tIsWas = "Undefined";
 $pPaused = FALSE;
 
 // Set up tab stops: $t[0] = no tabs, $t[9] = 9 tabs. 1 tab = 4 spaces.
 $t[0]="";for($i=1; $i<10; $i++)$t[$i]=$t[$i-1]."    ";
 
+$cData = isset($_COOKIE["ConwayData"]) ? $_COOKIE["ConwayData"] : NULL;
+
 $tRequestParts = explode("/", $_SERVER['REQUEST_URI']);
 $tRequestParts[count($tRequestParts) - 1] = "";
 $tRoot = implode("/", $tRequestParts);
-$tGetArgsCount = count($_GET);
-$tPostArgsCount = count($_POST);
 $tPostData = isset($_POST["data"]) ? $_POST["data"] : NULL;
-$pData = getPostedData($tPostData);
+$pData = getPostedData($tPostData, $cData);
 $pPaused = $pData["pause"];
-$tToday = time();
 $tNow = milliseconds();
 
 if(isset($pData["conway"]))
@@ -36,9 +32,6 @@ if(isset($pData["conway"]))
     $pGuesses = json_decode($_POST["guesses"], TRUE);
     $tAnswer = getDayIndex($pConway);
     $tCorrect = $tAnswer == $pGuess;
-    $tYesNo = $pPaused ? '(Paused)' : ($tCorrect ? 'Correct!' : 'Wrong!');
-    $tIsWas = (strtotime($pConway) <= $tToday) ? 'was' : 'will be';
-    $tDay = getDay($tAnswer);
     $tGuesses = logGuess($pGuesses, $pThen, $tNow, $tCorrect, $pPaused);
 }
 else
@@ -51,6 +44,8 @@ $tNewData = $pData;
 $tNewData["conway"] = $tDate;
 $tNewData["century"] = getCenturyDay($tDate);
 $tNewData["then"] = $tNow;
+$tNewData["day"] = $pThen == 0 ? -1 : $tAnswer;
+setCookieData($tNewData);
 $tData = json_encode($tNewData);
 
 if(isset($_GET['flags']))
@@ -67,15 +62,18 @@ if ($tPrintDebug)
 {
     print "<!-- debugging output...\n";
     printDebug("POST: data - '$tPostData'; guess - '$pGuess'; flags - '$pFlags'");
-    printDebug("TEMPS: tRoot - '$tRoot'; tAnswer - '$tAnswer'; tDay - '$tDay'");
+    printDebug("TEMPS: tRoot - '$tRoot'; tAnswer - '$tAnswer'");
     print "$t[1] ...end debugging output -->\n";
 }
 
 // Get and return the Posted JSON data object if it exists, and create a new one if not
-function getPostedData($pPostData)
+function getPostedData($pPostData, $pCookieData)
 {
     $tJsonData = json_decode($pPostData, TRUE);
-    return is_null($tJsonData) ? ["stats" => FALSE, "pause" => FALSE] : $tJsonData;
+    $tCookies = json_decode($pCookieData, TRUE);
+    return is_null($tJsonData) ?
+        (is_null($tCookies) ? ["pause" => FALSE, "ui" => "standard", "stats" => FALSE] : ["pause" => FALSE, "ui" => $tCookies["ui"], "stats" => $tCookies["stats"]]) :
+        $tJsonData;
 }
 
 // Find a random Date between $start_date and $end_date
@@ -102,6 +100,24 @@ function getDayIndex($dateString)
 function getDay($dayIndex)
 {
     return date('l', strtotime("Sunday +{$dayIndex} days"));
+}
+
+// Print the answer and/or paused state
+function printAnswerDivs()
+{
+    global $pConway, $tCorrect, $pPaused, $t;
+    if(count($_POST) == 4)
+    {
+        $tYesNo = $pPaused ? '(Paused)' : ($tCorrect ? 'Correct!' : 'Wrong!');
+        print "$t[5]<div class='answer' align=center>$tYesNo</div>\n";
+        if(!$tCorrect && !$pPaused)
+        {
+            $tIsWas = (strtotime($pConway) <= time()) ? 'was' : 'will be';
+            $tDay = getDay(getDayIndex($pConway));
+            print "$t[5]<div class='answer' align=center>$pConway<br>$tIsWas a</div>\n";
+            print "$t[5]<div id='theDay' class='answer' align=center>$tDay</div>\n";
+        }
+    }
 }
 
 // Print the days of the week as options for a select or drop-down list
@@ -143,6 +159,13 @@ function logGuess($pGuesses, $pThen, $pNow, $pCorrect, $pPaused)
         array_push($tResult, $tNext);
     }
     return json_encode($tResult);
+}
+
+// Set the cookie data to be saved in the browser
+function setCookieData($pNewData)
+{
+    $tData = json_encode(["ui" => $pNewData["ui"], "stats" => $pNewData["stats"]]);
+    setcookie("ConwayData", $tData, time() + (10 * 365 * 24 * 60 * 60));
 }
 
 // Prints stuff only if the global debug flag is true

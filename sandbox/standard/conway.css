@@ -289,11 +289,11 @@ button[id^="conwaySpeed_"].correctAnswer
 
 html { font-size:100%; }
 
-@media (min-width:  320px) {body {font-size:1.3rem;} #panel.showing {height: 141px;}}
-@media (min-width:  414px) {body {font-size:1.4rem;} #panel.showing {height: 151px;}}
-@media (min-width:  490px) {body {font-size:1.5rem;} #panel.showing {height: 163px;}}
-@media (min-width:  568px) {body {font-size:1.6rem;} #panel.showing {height: 168px;}}
-@media (min-width:  680px) {body {font-size:1.6rem;} #panel.showing {height: 186px;} #container {border-radius: 7px; width: 40%; margin: 25px auto;}}
-@media (min-width:  823px) {body {font-size:1.7rem;} #panel.showing {height: 167px;}}
-@media (min-width: 1024px) {body {font-size:1.8rem;} #panel.showing {height: 176px;}}
-@media (min-width: 1136px) {body {font-size:1.9rem;} #panel.showing {height: 181px;}}
+@media (min-width:  320px) {body {font-size:1.3rem;} #panel.showing {height: 146px;}}
+@media (min-width:  414px) {body {font-size:1.4rem;} #panel.showing {height: 156px;}}
+@media (min-width:  490px) {body {font-size:1.5rem;} #panel.showing {height: 167px;}}
+@media (min-width:  568px) {body {font-size:1.6rem;} #panel.showing {height: 174px;}}
+@media (min-width:  680px) {body {font-size:1.6rem;} #panel.showing {height: 188px;} #container {border-radius: 7px; width: 40%; margin: 25px auto;}}
+@media (min-width:  823px) {body {font-size:1.7rem;} #panel.showing {height: 171px;}}
+@media (min-width: 1024px) {body {font-size:1.8rem;} #panel.showing {height: 182px;}}
+@media (min-width: 1136px) {body {font-size:1.9rem;} #panel.showing {height: 186px;}}

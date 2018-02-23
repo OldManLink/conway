@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+    <head>
+        <title>Conway's Date Quizzer</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="HandheldFriendly" content="true">
+        <script type="text/javascript" src="conway.js"></script>
+        <link rel="stylesheet" type="text/css" href="conway.css">
+        <link rel="apple-touch-icon" sizes="57x57" href="icons/conway_57.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="icons/conway_72.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="icons/conway_114.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="icons/conway_144.png" />
+    </head>
+    <!-- debugging output...
+    POST: data - '{"pause":false,"ui":"speed","stats":false,"conway":"2188-02-10","century":0,"then":1519300828047,"day":"0"}'; guess - '2'; flags - '73'
+    TEMPS: tRoot - '/'; tAnswer - '0'
+     ...end debugging output -->
+    <body>
+        <div id='container'>
+            <form id='theForm' action='/' method='POST'>
+                <input type='hidden' name='flags' value=73>
+                <input type='hidden' name='guesses' value=[18537,27872,28382,-1,-1,12853,19650,22674,19065,-1,12345,21098,-1]>
+                <input type='hidden' name='data' value={"pause":false,"ui":"speed","stats":false,"conway":"2158-03-17","century":0,"then":1519301022675,"day":"0"}>
+                <div id='ui' name='standard'>
+                    <div id='prompt' align=center>Please calculate<br>(or guess)<br>the weekday:</div>
+                    <div id='theDate' align=center>2158-03-17</div>
+                    <div align=center>
+                        <select name='guess'>
+                            <option value='1'>Monday</option>
+                            <option value='2'>Tuesday</option>
+                            <option value='3'>Wednesday</option>
+                            <option value='4'>Thursday</option>
+                            <option value='5'>Friday</option>
+                            <option value='6'>Saturday</option>
+                            <option value='0'>Sunday</option>
+                        </select>
+                    </div>
+                    <button id='conwaySubmit'>Guess</button>
+                    <div class='answer' align=center>Wrong!</div>
+                    <div class='answer' align=center>2188-02-10<br>will be a</div>
+                    <div id='theDay' class='answer' align=center>Sunday</div>
+                </div>
+                <button type='button' disabled id='drawerHandle'>&nbsp;</button>
+            </form>
+        </div>
+    </body>
+</html>
